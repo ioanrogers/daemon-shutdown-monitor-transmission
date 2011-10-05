@@ -36,8 +36,8 @@ sub new {
                 default => 0,
             },
             url => {
-                regex    => qr/$RE{URI}{HTTP}{-scheme => 'https?'}/,
-                optional => 1,                                         # transmission::client provides default
+                regex   => qr/$RE{URI}{HTTP}{-scheme => 'https?'}/,
+                default => 'http://localhost:9091/transmission/rpc',
             },
             username => {
                 type    => SCALAR,
@@ -66,8 +66,6 @@ sub new {
 
 sub _init_tm {
     my $self = shift;
-
-    $self->{logger}->debug( 'Connecting to transmission at ' . $self->{params}->{url} );
 
     my $client;
 
