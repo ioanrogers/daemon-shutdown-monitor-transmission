@@ -36,7 +36,8 @@ sub new {
                 default => 0,
             },
             url => {
-                regex => qr/$RE{URI}{HTTP}{-scheme => 'https?'}/, # transmission::client provides default
+                regex => qr/$RE{URI}{HTTP}{-scheme => 'https?'}/,
+                optional => 1,           # transmission::client provides default
             },
             username => {
                 type => SCALAR,
