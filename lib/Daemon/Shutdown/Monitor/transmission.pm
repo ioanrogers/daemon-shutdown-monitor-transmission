@@ -32,19 +32,19 @@ sub new {
                 default => 3600,
             },
             count_seeding => {
-                type => BOOLEAN,
+                type    => BOOLEAN,
                 default => 0,
             },
             url => {
-                regex => qr/$RE{URI}{HTTP}{-scheme => 'https?'}/,
-                optional => 1,           # transmission::client provides default
+                regex    => qr/$RE{URI}{HTTP}{-scheme => 'https?'}/,
+                optional => 1,                                         # transmission::client provides default
             },
             username => {
-                type => SCALAR,
+                type    => SCALAR,
                 default => '',
             },
             password => {
-                type => SCALAR,
+                type    => SCALAR,
                 default => '',
             },
         },
@@ -58,16 +58,16 @@ sub new {
     my $logger = Log::Log4perl->get_logger();
     $self->{logger} = $logger;
     $logger->debug( "Monitor transmission params:\n" . Dump( \%params ) );
-    
+
     $self->{client} = $self->_init_tm;
-    
+
     return $self;
 }
 
 sub _init_tm {
     my $self = shift;
-    
-    $self->{logger}->debug('Connecting to transmission at ' . $self->{params}->{url});
+
+    $self->{logger}->debug( 'Connecting to transmission at ' . $self->{params}->{url} );
 
     my $client;
 
@@ -77,45 +77,49 @@ sub _init_tm {
         username => $self->{params}->{username},
         password => $self->{params}->{password},
     );
-   
+
     try {
-        $client = Transmission::Client->new(%tm_opts);
-    } catch {
+        $client = Transmission::Client->new( %tm_opts );
+    }
+    catch {
         $self->{logger}->fatal( 'Monitor transmission: ' . $client->error );
     };
-    
+
     return $client;
 }
 
 sub run {
     my $self = shift;
-    
+
     my $torrents;
     my $conditions_met = 1;
-    my $logger = $self->{logger};
+    my $logger         = $self->{logger};
 
     $logger->info( 'Monitor started running: transmission' );
 
     try {
-        $logger->debug('Monitor transmission: checking for active downloads');
+        $logger->debug( 'Monitor transmission: checking for active downloads' );
         $torrents = $self->{client}->read_torrents;
-    } catch {
-        $logger->fatal( 'Monitor transmission: ' . $self->{client}->error);
+    }
+    catch {
+        $logger->fatal( 'Monitor transmission: ' . $self->{client}->error );
     };
-  
+
     return 0 unless defined $torrents;
-    
+
     # we only need one active download (optionally seed)
-    foreach my $torrent ( @{ $torrents } ) {
-        if ( ($self->{params}->{count_seeding} && $torrent->status == $TM_STATUS_SEEDING ) || $torrent->status == $TM_STATUS_DOWNLOADING) {
-                $logger->debug( 'Monitor transmission sees active torrents' );
-                $conditions_met = 0;
-                last;
+    foreach my $torrent ( @{$torrents} ) {
+        if ( ( $self->{params}->{count_seeding} && $torrent->status == $TM_STATUS_SEEDING )
+            || $torrent->status == $TM_STATUS_DOWNLOADING )
+        {
+            $logger->debug( 'Monitor transmission sees active torrents' );
+            $conditions_met = 0;
+            last;
         }
     }
-    
+
     # TODO - REFACTOR ME - this block is basically the same in each monitor
-    if ($conditions_met) {
+    if ( $conditions_met ) {
         $self->{trigger_pending} = $self->{trigger_pending} || time();
 
         if ( $self->{trigger_pending}
@@ -128,7 +132,7 @@ sub run {
         }
 
         $logger->info( "Monitor transmission found no active downloads: trigger pending." );
-    
+
     } else {
         if ( $self->{trigger_pending} ) {
             $logger->info( "Monitor transmission trigger time being reset due to new active torrents" );
