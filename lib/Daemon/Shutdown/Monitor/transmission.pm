@@ -149,12 +149,12 @@ __END__
 
 =head3 Example configuration
  
-monitor:
-  transmission:
-    trigger_time: 1800
-    loop_sleep: 360
-    count_seeding: 1
-    url: http://localhost:9091
-    username: rpcusername
-    password: rpcpassword
+ monitor:
+   transmission:
+     trigger_time: 1800
+     loop_sleep: 360
+     count_seeding: 1
+     url: http://localhost:9091
+     username: rpcusername
+     password: rpcpassword
 =cut
