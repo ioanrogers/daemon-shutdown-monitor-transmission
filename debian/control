@@ -1,0 +1,35 @@
+Source: daemon-shutdown-monitor-transmission
+Section: perl
+Priority: optional
+Maintainer: Ioan Rogers <ioan.rogers@gmail.com>
+Build-Depends: debhelper (>= 8)
+Build-Depends-Indep: libanyevent-perl,
+ liblog-log4perl-perl,
+ libparams-validate-perl,
+ libtry-tiny-perl,
+ libregexp-common-perl,
+ libreadonly-perl,
+ libyaml-perl,
+ daemon-shutdown,
+ perl
+Standards-Version: 3.9.2
+Homepage: https://metacpan.org/dist/Daemon-Shutdown-Monitor-transmission/
+
+Package: daemon-shutdown-monitor-transmission
+Architecture: all
+Depends: ${misc:Depends}, ${perl:Depends},
+ libanyevent-perl,
+ liblog-log4perl-perl,
+ libparams-validate-perl,
+ libtry-tiny-perl,
+ libregexp-common-perl,
+ libreadonly-perl,
+ libyaml-perl,
+ daemon-shutdown,
+ perl
+Suggests: transmission-daemon 
+Description: Monitors active transmission downloads for daemon-shutdown
+ Monitor plugin for daemon-shutdown which checks active torrent downloads
+ in transmission
+
+

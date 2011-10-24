@@ -1,0 +1,8 @@
+Format-Specification: http://anonscm.debian.org/viewvc/dep/web/deps/dep5.mdwn?view=markup&pathrev=135
+Maintainer: Ioan Rogers <ioan.rogers@gmail.com>
+Source: https://metacpan.org/dist/Daemon-Shutdown-Monitor-transmission/
+Name: Daemon-Shutdown-Monitor-transmission
+
+Files: *
+Copyright: 2011, Ioan Rogers <ioan.rogers@gmail.com>
+License: Artistic 2.0
