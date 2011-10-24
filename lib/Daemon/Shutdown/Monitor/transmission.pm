@@ -16,8 +16,7 @@ Readonly my $TM_STATUS_DOWNLOADING => 4;
 Readonly my $TM_STATUS_SEEDING     => 8;
 
 sub new {
-    my $class  = shift;
-    my %params = @_;
+    my ( $class, %params ) = @_;
 
     # Validate the config file
     %params = validate_with(
@@ -41,11 +40,11 @@ sub new {
             },
             username => {
                 type    => SCALAR,
-                default => '',
+                default => q{},
             },
             password => {
                 type    => SCALAR,
-                default => '',
+                default => q{},
             },
         },
     );
@@ -103,7 +102,9 @@ sub run {
         $logger->fatal( 'Monitor transmission: ' . $self->{client}->error );
     };
 
-    return 0 unless defined $torrents;
+    if ( !defined $torrents ) {
+        return 0;
+    }
 
     # we only need one active download (optionally seed)
     foreach my $torrent ( @{$torrents} ) {
@@ -118,22 +119,22 @@ sub run {
 
     # TODO - REFACTOR ME - this block is basically the same in each monitor
     if ( $conditions_met ) {
-        $self->{trigger_pending} = $self->{trigger_pending} || time();
+        $self->{trigger_pending} = $self->{trigger_pending} || time;
 
         if ( $self->{trigger_pending}
             and ( time() - $self->{trigger_pending} ) >= $self->{params}->{trigger_time} )
         {
 
             # ... and the trigger was set, and time has run out: time to return!
-            $logger->info( "Monitor transmission trigger time reached after $self->{params}->{trigger_time}" );
+            $logger->info( 'Monitor transmission trigger time reached after ' . $self->{params}->{trigger_time} );
             return 1;
         }
 
-        $logger->info( "Monitor transmission found no active downloads: trigger pending." );
+        $logger->info( 'Monitor transmission found no active downloads: trigger pending.' );
 
     } else {
         if ( $self->{trigger_pending} ) {
-            $logger->info( "Monitor transmission trigger time being reset due to new active torrents" );
+            $logger->info( 'Monitor transmission trigger time being reset due to new active torrents' );
         }
 
         # Conditions not met - reset the trigger incase it was previously set.
@@ -145,10 +146,10 @@ sub run {
 
 1;
 
-__END__
+=head1 SYNOPSIS
 
-=head3 Example configuration
- 
+In your sdd.conf:
+
  monitor:
    transmission:
      trigger_time: 1800
@@ -157,4 +158,5 @@ __END__
      url: http://localhost:9091
      username: rpcusername
      password: rpcpassword
-=cut
+
+
