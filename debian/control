@@ -11,6 +11,7 @@ Build-Depends-Indep: libanyevent-perl,
  libreadonly-perl,
  libyaml-perl,
  daemon-shutdown,
+ libtransmission-client-perl,
  perl
 Standards-Version: 3.9.2
 Homepage: https://metacpan.org/dist/Daemon-Shutdown-Monitor-transmission/
@@ -26,6 +27,7 @@ Depends: ${misc:Depends}, ${perl:Depends},
  libreadonly-perl,
  libyaml-perl,
  daemon-shutdown,
+ libtransmission-client-perl,
  perl
 Suggests: transmission-daemon
 Recommends: libreadonly-xs-perl
