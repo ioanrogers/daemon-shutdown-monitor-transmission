@@ -27,7 +27,8 @@ Depends: ${misc:Depends}, ${perl:Depends},
  libyaml-perl,
  daemon-shutdown,
  perl
-Suggests: transmission-daemon 
+Suggests: transmission-daemon
+Recommends: libreadonly-xs-perl
 Description: Monitors active transmission downloads for daemon-shutdown
  Monitor plugin for daemon-shutdown which checks active torrent downloads
  in transmission
